@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0C3A7A;       /* Bleu foncé (base du logo) */
+  --color-primary-light: #1572E8; /* Bleu vif (boutons / appels à l'action) */
+  --color-accent: #32C6D8;        /* Cyan (pour les icônes/accents) */
+  --color-bg-light: #f8fafc;      /* Fond gris très clair */
+}
+
+body {
+  background-color: var(--color-bg-light);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
