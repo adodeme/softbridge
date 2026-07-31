@@ -1,15 +1,15 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://softbridge-f-g-api-2x23.onrender.com',
-    // Retrait du Content-Type global pour permettre le multipart/form-data
+    // Utilise la variable d'environnement VITE_API_BASE_URL fournie par Netlify,
+    // avec fallback sur localhost pour le développement local.
+    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
     headers: {
         'Accept': 'application/json'
     },
     withCredentials: true
 });
 
-// Intercepteur pour ajouter le token d'authentification
 api.interceptors.request.use(
     config => {
         const token = localStorage.getItem('token');
