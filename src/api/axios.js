@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'https://romas-backend.onrender.com',
+    baseURL: 'https://softbridge-f-g-api-2x23.onrender.com',
     // Retrait du Content-Type global pour permettre le multipart/form-data
     headers: {
         'Accept': 'application/json'
