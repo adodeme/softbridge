@@ -22,19 +22,64 @@ const loadInvoice = async () => {
 };
 
 // Simulation du paiement via FedaPay (pour le test)
-const initiatePayment = async () => {
+const simulatePayment = async () => {
   try {
-    const res = await api.post('/payments/initiate', { invoice_id: invoice.value.id });
-    // Redirige vers l'URL de paiement FedaPay
-    window.location.href = res.data.payment_url;
+    const res = await api.post('/payments/simulate', { invoice_id: invoice.value.id });
+    Swal.fire('Succès', res.data.message, 'success');
+    await loadInvoice(); // Recharge la facture pour voir le statut payé
   } catch (error) {
-    Swal.fire('Erreur', error.response?.data?.error || 'Impossible d’initier le paiement.', 'error');
+    Swal.fire('Erreur', error.response?.data?.error || 'Échec de la simulation.', 'error');
   }
 };
 
 // Télécharger le PDF de la facture
 const downloadPdf = async () => {
-    window.open(`http://localhost:8000/api/invoices/${invoice.value.id}/download`, '_blank');
+  try {
+    const response = await api.get(`/invoices/${invoice.value.id}/download`, {
+      responseType: 'blob' // ← indispensable pour recevoir le PDF en binaire
+    });
+    // Créer une URL blob à partir des données reçues
+    const blob = new Blob([response.data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    // Créer un lien temporaire et le cliquer
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `facture_${invoice.value.numero}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    // Nettoyer
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Erreur téléchargement PDF', error);
+    Swal.fire('Erreur', 'Impossible de télécharger la facture.', 'error');
+  }
+};
+const accessSoftware = async () => {
+  const { value: key } = await Swal.fire({
+    title: 'Entrez votre clé d\'accès',
+    input: 'text',
+    inputPlaceholder: 'Collez la clé affichée dans la facture',
+    showCancelButton: true,
+    confirmButtonText: 'Accéder',
+    cancelButtonText: 'Annuler',
+    inputValidator: (value) => {
+      if (!value) {
+        return 'Vous devez entrer une clé!';
+      }
+    }
+  });
+
+  if (!key) return;
+
+  try {
+    const res = await api.post('/software/verify-key', { key: key });
+    if (res.data.url) {
+      window.open(res.data.url, '_blank');
+    }
+  } catch (error) {
+    Swal.fire('Erreur', error.response?.data?.message || 'Clé invalide ou expirée.', 'error');
+  }
 };
 
 onMounted(loadInvoice);
@@ -73,15 +118,21 @@ onMounted(loadInvoice);
         </div>
 
         <div class="mt-6 flex flex-col sm:flex-row gap-3">
-            <button v-if="invoice.statut !== 'paye'" @click="initiatePayment" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold hover:bg-green-600 transition">
-                <i class="fas fa-credit-card mr-2"></i> Payer avec FedaPay
+            <button v-if="invoice.statut !== 'paye'" @click="simulatePayment" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold hover:bg-green-600 transition">
+                <i class="fas fa-flask mr-2"></i> Simuler le paiement
             </button>
             <button v-else @click="downloadPdf" class="flex-1 bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-light transition">
                 <i class="fas fa-file-pdf mr-2"></i> Télécharger le PDF
             </button>
+            <button v-if="invoice.type === 'abonnement' && invoice.statut === 'paye'"
+                    @click="accessSoftware"
+                    class="flex-1 bg-primary-light text-white py-3 rounded-xl font-bold hover:bg-primary transition">
+                <i class="fas fa-external-link-alt mr-2"></i> Accéder au logiciel
+            </button>
             <button @click="router.push('/dashboard/client/invoices')" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-300 transition">
                 Ignorer
             </button>
+
         </div>
     </div>
   </div>

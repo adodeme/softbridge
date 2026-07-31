@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8000/api',
+    baseURL: 'https://romas-backend.onrender.com',
     // Retrait du Content-Type global pour permettre le multipart/form-data
     headers: {
         'Accept': 'application/json'

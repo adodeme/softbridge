@@ -33,10 +33,6 @@ const authStore = useAuthStore();
       <router-link to="/dashboard/admin/notifications" active-class="bg-blue-50 text-primary-light" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
         <i class="fas fa-bell w-5 text-center"></i> Notifications
       </router-link>
-      <router-link to="/dashboard/admin/audit-logs" active-class="bg-blue-50 text-primary-light" 
-      class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
-        <i class="fas fa-history w-5 text-center"></i> Journal d'audit
-      </router-link>
     </nav>
     <button @click="authStore.logout()" class="mt-auto flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-colors">
       <i class="fas fa-right-from-bracket w-5 text-center"></i> Déconnexion
