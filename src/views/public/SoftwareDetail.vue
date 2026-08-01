@@ -48,8 +48,8 @@ const subscribe = async () => {
     <div v-else class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
       <div class="h-72 sm:h-96 w-full overflow-hidden bg-gray-100">
         <img
-          v-if="software.capture"
-          :src="'http://localhost:8000/storage/' + software.capture"
+          v-if="software.capture_url"
+          :src="software.capture_url"
           :alt="software.nom"
           class="w-full h-full object-cover"
         />

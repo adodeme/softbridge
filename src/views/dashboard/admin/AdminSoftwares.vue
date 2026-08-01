@@ -7,7 +7,6 @@ const softwares = ref([]);
 const isLoading = ref(true);
 const errorMessage = ref('');
 const showModal = ref(false);
-const isEdit = ref(false);
 
 const form = ref({
   id: null,
@@ -43,9 +42,7 @@ const onFileChange = (e) => {
   }
 };
 
-const openModal = (sw = null) => {
-  // On ne permet plus la modification, donc on ignore sw
-  isEdit.value = false;
+const openModal = () => {
   form.value = {
     id: null,
     nom: '',
@@ -100,6 +97,7 @@ const saveSoftware = async () => {
     Swal.fire({ icon: 'error', title: 'Erreur', text: errorMsg });
   }
 };
+
 const deleteSoftware = async (id) => {
   const result = await Swal.fire({
     title: 'Supprimer ce logiciel ?',
@@ -107,7 +105,9 @@ const deleteSoftware = async (id) => {
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#d33',
-    cancelButtonColor: '#6b7280'
+    cancelButtonColor: '#6b7280',
+    confirmButtonText: 'Oui, supprimer',
+    cancelButtonText: 'Annuler'
   });
   if (!result.isConfirmed) return;
 
@@ -119,12 +119,12 @@ const deleteSoftware = async (id) => {
     Swal.fire('Erreur', error.response?.data?.error || 'Erreur lors de la suppression.', 'error');
   }
 };
+
 onMounted(loadData);
 </script>
 
 <template>
   <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 min-h-[400px]">
-    <!-- En-tête -->
     <div class="flex flex-col sm:flex-row justify-between items-center mb-6">
       <h3 class="text-2xl font-bold text-primary mb-4 sm:mb-0 flex items-center gap-2">
         <i class="fas fa-cubes text-primary-light"></i> Gestion du catalogue
@@ -134,7 +134,6 @@ onMounted(loadData);
       </button>
     </div>
 
-    <!-- Chargement / Erreur / Vide -->
     <div v-if="isLoading" class="text-center py-10 text-gray-500">
       <i class="fas fa-spinner fa-spin text-3xl text-primary-light"></i>
       <p class="mt-2">Chargement...</p>
@@ -149,20 +148,22 @@ onMounted(loadData);
       <p>Aucun logiciel dans le catalogue.</p>
     </div>
 
-    <!-- Tableau sans colonne Actions -->
     <div v-else class="overflow-x-auto border border-gray-200 rounded-lg">
       <table class="w-full text-sm text-left">
         <thead class="bg-gray-50 text-gray-600 border-b border-gray-200">
           <tr>
             <th class="px-6 py-3">Logiciel</th>
             <th class="px-6 py-3">Catégorie</th>
-            <th class="px-6 py-3">Actions</th>  <!-- Colonne Actions remise -->
+            <th class="px-6 py-3">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
           <tr v-for="sw in softwares" :key="sw.id" class="hover:bg-gray-50 transition-colors">
             <td class="px-6 py-4 flex items-center gap-3">
-              <img v-if="sw.capture" :src="sw.capture_url" class="w-12 h-12 object-cover rounded border" />
+              <img v-if="sw.capture_url" :src="sw.capture_url" class="w-12 h-12 object-cover rounded border" />
+              <div v-else class="w-12 h-12 bg-gray-200 rounded border flex items-center justify-center text-gray-400">
+                <i class="fas fa-image"></i>
+              </div>
               <div>
                 <p class="font-medium text-gray-800">{{ sw.nom }}</p>
                 <p class="text-xs text-gray-500">{{ sw.description }}</p>
@@ -170,7 +171,7 @@ onMounted(loadData);
             </td>
             <td class="px-6 py-4 text-gray-600">{{ sw.categorie }}</td>
             <td class="px-6 py-4">
-              <button @click="deleteSoftware(sw.id)" class="text-red-500 hover:text-red-700 font-semibold text-sm">
+              <button @click="deleteSoftware(sw.id)" class="text-red-500 hover:text-red-700 font-semibold text-sm flex items-center gap-1">
                 <i class="fas fa-trash-can"></i> Supprimer
               </button>
             </td>
@@ -179,7 +180,7 @@ onMounted(loadData);
       </table>
     </div>
 
-    <!-- MODALE AJOUT (inchangée) -->
+    <!-- MODALE AJOUT -->
     <div v-if="showModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4" @click.self="showModal = false">
       <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 max-h-[90vh] overflow-y-auto">
         <div class="flex justify-between items-center border-b border-gray-100 pb-4 mb-6">
@@ -216,7 +217,6 @@ onMounted(loadData);
             </div>
           </div>
 
-          <!-- Formules d'abonnement -->
           <div class="border-t pt-4 mt-4">
             <h4 class="font-bold text-gray-800 mb-3">Formules d'abonnement (prix en FCFA)</h4>
             <div class="grid grid-cols-3 gap-3">

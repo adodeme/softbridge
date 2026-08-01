@@ -26,9 +26,9 @@ onMounted(async () => {
         :key="sw.id" 
         class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow duration-300 flex flex-col"
       >
-        <div v-if="sw.capture" class="mb-4">
+        <div v-if="sw.capture_url" class="mb-4">
           <img 
-            :src="'http://localhost:8000/storage/' + sw.capture" 
+            :src="sw.capture_url" 
             :alt="sw.nom" 
             class="w-full h-48 object-cover rounded-lg shadow-sm"
           />
