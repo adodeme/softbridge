@@ -100,7 +100,25 @@ const saveSoftware = async () => {
     Swal.fire({ icon: 'error', title: 'Erreur', text: errorMsg });
   }
 };
+const deleteSoftware = async (id) => {
+  const result = await Swal.fire({
+    title: 'Supprimer ce logiciel ?',
+    text: "Cette action est irréversible.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#6b7280'
+  });
+  if (!result.isConfirmed) return;
 
+  try {
+    await api.delete(`/catalog/${id}`);
+    await loadData();
+    Swal.fire('Supprimé !', 'Le logiciel a été supprimé.', 'success');
+  } catch (error) {
+    Swal.fire('Erreur', error.response?.data?.error || 'Erreur lors de la suppression.', 'error');
+  }
+};
 onMounted(loadData);
 </script>
 
@@ -138,18 +156,24 @@ onMounted(loadData);
           <tr>
             <th class="px-6 py-3">Logiciel</th>
             <th class="px-6 py-3">Catégorie</th>
+            <th class="px-6 py-3">Actions</th>  <!-- Colonne Actions remise -->
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
           <tr v-for="sw in softwares" :key="sw.id" class="hover:bg-gray-50 transition-colors">
             <td class="px-6 py-4 flex items-center gap-3">
-              <img v-if="sw.capture" :src="'http://localhost:8000/storage/' + sw.capture" class="w-12 h-12 object-cover rounded border" />
+              <img v-if="sw.capture" :src="sw.capture_url" class="w-12 h-12 object-cover rounded border" />
               <div>
                 <p class="font-medium text-gray-800">{{ sw.nom }}</p>
                 <p class="text-xs text-gray-500">{{ sw.description }}</p>
               </div>
             </td>
             <td class="px-6 py-4 text-gray-600">{{ sw.categorie }}</td>
+            <td class="px-6 py-4">
+              <button @click="deleteSoftware(sw.id)" class="text-red-500 hover:text-red-700 font-semibold text-sm">
+                <i class="fas fa-trash-can"></i> Supprimer
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
