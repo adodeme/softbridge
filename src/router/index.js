@@ -14,6 +14,7 @@ import ForgotPassword from '@/views/auth/ForgotPassword.vue';        // <-- Nouv
 import ResetPassword from '@/views/auth/ResetPassword.vue';          // <-- Nouveau
 
 import PublicLayout from '@/layouts/PublicLayout.vue';
+import AuthLayout from '@/layouts/AuthLayout.vue';
 
 // --- Layouts (Les conteneurs des Dashboards) ---
 import ClientLayout from '@/layouts/ClientLayout.vue';
@@ -66,10 +67,17 @@ import AdminReportDetail from '@/views/dashboard/admin/AdminReportDetail.vue';
 const routes = [
     // --- Pages PUBLIQUES ---
 
-
-    { path: '/forgot-password', component: ForgotPassword },     // <-- Nouveau
-    { path: '/reset-password', component: ResetPassword },       // <-- Nouveau
     { path: '/services/:slug', component: ServiceDetail },
+    {
+    path: '/',
+    component: AuthLayout,
+    children: [
+        { path: 'login', component: Login },
+        { path: 'register', component: Register },
+        { path: 'forgot-password', component: ForgotPassword },
+        { path: 'reset-password', component: ResetPassword },
+    ]
+    },
     {
     path: '/',
     component: PublicLayout,
@@ -79,8 +87,6 @@ const routes = [
         { path: 'catalog/:id', component: SoftwareDetail },
         { path: 'rdv', component: Appointment },
         { path: 'appointments/:id', component: AppointmentDetails },
-        { path: '/login', component: Login },
-        { path: '/register', component: Register },
     ]
     },
     // --- DASHBOARD CLIENT ---
