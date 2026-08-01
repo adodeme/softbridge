@@ -13,6 +13,8 @@ import ServiceDetail from '@/views/public/ServiceDetail.vue';
 import ForgotPassword from '@/views/auth/ForgotPassword.vue';        // <-- Nouveau
 import ResetPassword from '@/views/auth/ResetPassword.vue';          // <-- Nouveau
 
+import PublicLayout from '@/layouts/PublicLayout.vue';
+
 // --- Layouts (Les conteneurs des Dashboards) ---
 import ClientLayout from '@/layouts/ClientLayout.vue';
 import ChefProjectLayout from '@/layouts/ChefProjectLayout.vue';
@@ -63,17 +65,23 @@ import AdminReportDetail from '@/views/dashboard/admin/AdminReportDetail.vue';
 
 const routes = [
     // --- Pages PUBLIQUES ---
-    { path: '/', component: Home },
-    { path: '/catalog', component: Catalog },
-    { path: '/catalog/:id', component: SoftwareDetail },
-    { path: '/rdv', component: Appointment },
-    { path: '/appointments/:id', component: AppointmentDetails },
+
     { path: '/login', component: Login },
     { path: '/register', component: Register },
     { path: '/forgot-password', component: ForgotPassword },     // <-- Nouveau
     { path: '/reset-password', component: ResetPassword },       // <-- Nouveau
     { path: '/services/:slug', component: ServiceDetail },
-
+    {
+    path: '/',
+    component: PublicLayout,
+    children: [
+        { path: '', component: Home },
+        { path: 'catalog', component: Catalog },
+        { path: 'catalog/:id', component: SoftwareDetail },
+        { path: 'rdv', component: Appointment },
+        { path: 'appointments/:id', component: AppointmentDetails },
+    ]
+    },
     // --- DASHBOARD CLIENT ---
     { 
         path: '/dashboard/client', 
