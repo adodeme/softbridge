@@ -10,8 +10,8 @@ import Appointment from '@/views/public/Appointment.vue';
 import AppointmentDetails from '@/views/public/AppointmentDetails.vue';
 import SoftwareDetail from '@/views/public/SoftwareDetail.vue';
 import ServiceDetail from '@/views/public/ServiceDetail.vue';
-import ForgotPassword from '@/views/auth/ForgotPassword.vue';        // <-- Nouveau
-import ResetPassword from '@/views/auth/ResetPassword.vue';          // <-- Nouveau
+import ForgotPassword from '@/views/auth/ForgotPassword.vue';
+import ResetPassword from '@/views/auth/ResetPassword.vue';
 
 import PublicLayout from '@/layouts/PublicLayout.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
@@ -63,36 +63,39 @@ import AdminProjectDetail from '@/views/dashboard/admin/AdminProjectDetail.vue';
 // --- Dashboard Administrateur (Pages de Détail) ---
 import AdminReportDetail from '@/views/dashboard/admin/AdminReportDetail.vue';
 
-
 const routes = [
-    // --- Pages PUBLIQUES ---
-
+    // --- Page indépendante (service détail) ---
     { path: '/services/:slug', component: ServiceDetail },
+
+    // --- Pages PUBLIQUES avec footer (accueil, catalogue, rdv...) ---
     {
-    path: '/',
-    component: AuthLayout,
-    children: [
-        { path: 'login', component: Login },
-        { path: 'register', component: Register },
-        { path: 'forgot-password', component: ForgotPassword },
-        { path: 'reset-password', component: ResetPassword },
-    ]
+        path: '/',
+        component: PublicLayout,
+        children: [
+            { path: '', component: Home },
+            { path: 'catalog', component: Catalog },
+            { path: 'catalog/:id', component: SoftwareDetail },
+            { path: 'rdv', component: Appointment },
+            { path: 'appointments/:id', component: AppointmentDetails },
+        ]
     },
+
+    // --- Pages d'authentification sans footer ---
     {
-    path: '/',
-    component: PublicLayout,
-    children: [
-        { path: '', component: Home },
-        { path: 'catalog', component: Catalog },
-        { path: 'catalog/:id', component: SoftwareDetail },
-        { path: 'rdv', component: Appointment },
-        { path: 'appointments/:id', component: AppointmentDetails },
-    ]
+        path: '/',
+        component: AuthLayout,
+        children: [
+            { path: 'login', component: Login },
+            { path: 'register', component: Register },
+            { path: 'forgot-password', component: ForgotPassword },
+            { path: 'reset-password', component: ResetPassword },
+        ]
     },
+
     // --- DASHBOARD CLIENT ---
-    { 
-        path: '/dashboard/client', 
-        component: ClientLayout, 
+    {
+        path: '/dashboard/client',
+        component: ClientLayout,
         meta: { requiresAuth: true, role: 'client' },
         children: [
             { path: '', redirect: 'accueil' },
@@ -109,9 +112,9 @@ const routes = [
     },
 
     // --- DASHBOARD CHEF DE PROJET ---
-    { 
-        path: '/dashboard/chef-projet', 
-        component: ChefProjectLayout, 
+    {
+        path: '/dashboard/chef-projet',
+        component: ChefProjectLayout,
         meta: { requiresAuth: true, role: 'chef_projet' },
         children: [
             { path: '', redirect: 'accueil' },
@@ -130,9 +133,9 @@ const routes = [
     },
 
     // --- DASHBOARD ADMINISTRATEUR ---
-    { 
-        path: '/dashboard/admin', 
-        component: AdminLayout, 
+    {
+        path: '/dashboard/admin',
+        component: AdminLayout,
         meta: { requiresAuth: true, role: 'administrateur' },
         children: [
             { path: '', redirect: 'accueil' },
