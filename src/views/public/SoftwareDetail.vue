@@ -30,34 +30,22 @@ const subscribe = async () => {
   }
   try {
     const res = await api.post('/subscriptions', { license_id: selectedLicense.value.id });
-    Swal.fire({
-      icon: 'success',
-      title: 'Abonnement initié !',
-      text: 'Veuillez procéder au paiement dans votre tableau de bord.',
-      confirmButtonColor: '#1572E8'
-    });
+    Swal.fire({ icon: 'success', title: 'Abonnement initié !', text: 'Veuillez procéder au paiement dans votre tableau de bord.', confirmButtonColor: '#1572E8' });
     router.push('/dashboard/client/invoices');
   } catch (error) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Erreur',
-      text: error.response?.data?.message || 'Une erreur est survenue.'
-    });
+    Swal.fire({ icon: 'error', title: 'Erreur', text: error.response?.data?.message || 'Une erreur est survenue.' });
   }
 };
 </script>
 
 <template>
   <div class="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-    <!-- Chargement -->
     <div v-if="!software" class="text-center py-20 text-gray-500">
       <i class="fas fa-spinner fa-spin text-4xl text-primary-light"></i>
       <p class="mt-4">Chargement du logiciel...</p>
     </div>
 
-    <!-- Contenu -->
     <div v-else class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
-      <!-- Image de couverture (taille augmentée) -->
       <div class="h-72 sm:h-96 w-full overflow-hidden bg-gray-100">
         <img
           v-if="software.capture"
@@ -70,18 +58,14 @@ const subscribe = async () => {
         </div>
       </div>
 
-      <!-- Détails -->
       <div class="p-8 md:p-12 grid grid-cols-1 lg:grid-cols-3 gap-10">
-        <!-- Colonne principale : description -->
         <div class="lg:col-span-2">
           <h1 class="text-3xl font-bold text-primary mb-4">{{ software.nom }}</h1>
           
-          <!-- Description détaillée -->
           <div class="prose prose-lg max-w-none text-gray-700 mb-8">
             <p class="text-lg leading-relaxed">{{ software.description }}</p>
           </div>
 
-          <!-- Blocs supplémentaires (optionnels) -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
             <div class="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
               <i class="fas fa-check-circle text-green-500 text-xl mt-0.5"></i>
@@ -100,7 +84,6 @@ const subscribe = async () => {
           </div>
         </div>
 
-        <!-- Colonne latérale : abonnement -->
         <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
           <h2 class="text-xl font-bold text-gray-800 mb-4">Formules d'abonnement</h2>
           
