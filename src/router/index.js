@@ -66,8 +66,7 @@ import AdminReportDetail from '@/views/dashboard/admin/AdminReportDetail.vue';
 const routes = [
     // --- Pages PUBLIQUES ---
 
-    { path: '/login', component: Login },
-    { path: '/register', component: Register },
+
     { path: '/forgot-password', component: ForgotPassword },     // <-- Nouveau
     { path: '/reset-password', component: ResetPassword },       // <-- Nouveau
     { path: '/services/:slug', component: ServiceDetail },
@@ -80,6 +79,8 @@ const routes = [
         { path: 'catalog/:id', component: SoftwareDetail },
         { path: 'rdv', component: Appointment },
         { path: 'appointments/:id', component: AppointmentDetails },
+        { path: '/login', component: Login },
+        { path: '/register', component: Register },
     ]
     },
     // --- DASHBOARD CLIENT ---
