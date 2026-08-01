@@ -43,6 +43,7 @@ const onFileChange = (e) => {
 };
 
 const openModal = () => {
+  // Réinitialiser le formulaire pour l'ajout
   form.value = {
     id: null,
     nom: '',
@@ -98,28 +99,6 @@ const saveSoftware = async () => {
   }
 };
 
-const deleteSoftware = async (id) => {
-  const result = await Swal.fire({
-    title: 'Supprimer ce logiciel ?',
-    text: "Cette action est irréversible.",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#6b7280',
-    confirmButtonText: 'Oui, supprimer',
-    cancelButtonText: 'Annuler'
-  });
-  if (!result.isConfirmed) return;
-
-  try {
-    await api.delete(`/catalog/${id}`);
-    await loadData();
-    Swal.fire('Supprimé !', 'Le logiciel a été supprimé.', 'success');
-  } catch (error) {
-    Swal.fire('Erreur', error.response?.data?.error || 'Erreur lors de la suppression.', 'error');
-  }
-};
-
 onMounted(loadData);
 </script>
 
@@ -134,6 +113,7 @@ onMounted(loadData);
       </button>
     </div>
 
+    <!-- Chargement / Erreur / Vide -->
     <div v-if="isLoading" class="text-center py-10 text-gray-500">
       <i class="fas fa-spinner fa-spin text-3xl text-primary-light"></i>
       <p class="mt-2">Chargement...</p>
@@ -148,13 +128,13 @@ onMounted(loadData);
       <p>Aucun logiciel dans le catalogue.</p>
     </div>
 
+    <!-- Tableau sans colonne Actions -->
     <div v-else class="overflow-x-auto border border-gray-200 rounded-lg">
       <table class="w-full text-sm text-left">
         <thead class="bg-gray-50 text-gray-600 border-b border-gray-200">
           <tr>
             <th class="px-6 py-3">Logiciel</th>
             <th class="px-6 py-3">Catégorie</th>
-            <th class="px-6 py-3">Actions</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
@@ -170,11 +150,6 @@ onMounted(loadData);
               </div>
             </td>
             <td class="px-6 py-4 text-gray-600">{{ sw.categorie }}</td>
-            <td class="px-6 py-4">
-              <button @click="deleteSoftware(sw.id)" class="text-red-500 hover:text-red-700 font-semibold text-sm flex items-center gap-1">
-                <i class="fas fa-trash-can"></i> Supprimer
-              </button>
-            </td>
           </tr>
         </tbody>
       </table>
@@ -217,6 +192,7 @@ onMounted(loadData);
             </div>
           </div>
 
+          <!-- Formules d'abonnement -->
           <div class="border-t pt-4 mt-4">
             <h4 class="font-bold text-gray-800 mb-3">Formules d'abonnement (prix en FCFA)</h4>
             <div class="grid grid-cols-3 gap-3">
