@@ -88,14 +88,16 @@ const saveSoftware = async () => {
     await loadData();
     Swal.fire({ icon: 'success', title: 'Logiciel ajouté', timer: 2000 });
   } catch (e) {
-    let errorMsg = 'Erreur lors de l\'enregistrement.';
-    if (e.response?.data?.errors) {
-      const firstKey = Object.keys(e.response.data.errors)[0];
-      errorMsg = e.response.data.errors[firstKey][0];
-    } else if (e.response?.data?.message) {
-      errorMsg = e.response.data.message;
-    }
-    Swal.fire({ icon: 'error', title: 'Erreur', text: errorMsg });
+      let errorMsg = 'Erreur lors de l\'enregistrement.';
+      if (e.response?.data?.errors) {
+          const firstKey = Object.keys(e.response.data.errors)[0];
+          errorMsg = e.response.data.errors[firstKey][0];
+      } else if (e.response?.data?.message) {
+          errorMsg = e.response.data.message;
+      } else if (e.message) {
+          errorMsg = e.message;  // <-- ajout pour les erreurs réseau
+      }
+      Swal.fire({ icon: 'error', title: 'Erreur', text: errorMsg });
   }
 };
 
