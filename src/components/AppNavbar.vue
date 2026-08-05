@@ -22,6 +22,7 @@ const fetchNotifications = async () => {
 };
 
 const unreadCount = computed(() => notifications.value.filter(n => !n.lu).length);
+// Vérifier si l'URL actuelle commence par /dashboard/
 const isInDashboard = computed(() => route.path.startsWith('/dashboard/'));
 
 const handleLogout = async () => {
@@ -75,6 +76,7 @@ onUnmounted(() => {
             </span>
           </div>
 
+          <!-- Lien intelligent : Accueil si on est dans le dashboard, Mon Dashboard sinon -->
           <template v-if="isInDashboard">
             <router-link to="/" class="text-gray-700 hover:text-primary-light">Accueil</router-link>
           </template>

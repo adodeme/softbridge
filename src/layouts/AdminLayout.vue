@@ -8,7 +8,6 @@ const sidebarOpen = ref(false);
 
 <template>
   <div class="flex flex-col h-screen bg-gray-50 overflow-hidden">
-    <!-- Barre de navigation en haut -->
     <AppNavbar />
 
     <div class="flex flex-1 overflow-hidden">
