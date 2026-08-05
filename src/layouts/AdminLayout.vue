@@ -9,11 +9,9 @@ const sidebarOpen = ref(false);
 <template>
   <div class="flex flex-col h-screen bg-gray-50 overflow-hidden">
     <AppNavbar />
-
     <div class="flex flex-1 overflow-hidden">
-      <!-- Sidebar desktop (visible sur md et plus) -->
+      <!-- Sidebar desktop visible sur md et plus -->
       <AdminSidebar class="hidden md:flex" />
-
       <!-- Overlay + sidebar mobile -->
       <div v-if="sidebarOpen" class="fixed inset-0 z-40 md:hidden">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" @click="sidebarOpen = false"></div>
@@ -21,7 +19,6 @@ const sidebarOpen = ref(false);
           <AdminSidebar />
         </div>
       </div>
-
       <div class="flex-1 flex flex-col overflow-hidden">
         <main class="flex-1 overflow-y-auto p-6">
           <!-- Bouton d'ouverture sidebar mobile -->
