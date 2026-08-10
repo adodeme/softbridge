@@ -66,7 +66,6 @@ import AdminReportDetail from '@/views/dashboard/admin/AdminReportDetail.vue';
 const routes = [
     // --- Page indépendante (service détail) ---
     { path: '/services/:slug', component: ServiceDetail },
-    { path: '/demande-devis', component: () => import('@/views/public/DemandeDevis.vue') },
 
     // --- Pages PUBLIQUES avec footer (accueil, catalogue, rdv...) ---
     {
@@ -78,6 +77,7 @@ const routes = [
             { path: 'catalog/:id', component: SoftwareDetail },
             { path: 'rdv', component: Appointment },
             { path: 'appointments/:id', component: AppointmentDetails },
+            { path: '/demande-devis', component: () => import('@/views/public/DemandeDevis.vue') },
         ]
     },
 

@@ -21,33 +21,29 @@ const loadInvoice = async () => {
     }
 };
 
-// Simulation du paiement via FedaPay (pour le test)
-const simulatePayment = async () => {
+// Paiement réel via FedaPay (mode test)
+const initiatePayment = async () => {
   try {
-    const res = await api.post('/payments/simulate', { invoice_id: invoice.value.id });
-    Swal.fire('Succès', res.data.message, 'success');
-    await loadInvoice(); // Recharge la facture pour voir le statut payé
+    const res = await api.post('/payments/initiate', { invoice_id: invoice.value.id });
+    // Rediriger vers l'URL de paiement FedaPay
+    window.location.href = res.data.payment_url;
   } catch (error) {
-    Swal.fire('Erreur', error.response?.data?.error || 'Échec de la simulation.', 'error');
+    Swal.fire('Erreur', error.response?.data?.error || 'Impossible d’initier le paiement.', 'error');
   }
 };
 
-// Télécharger le PDF de la facture
 const downloadPdf = async () => {
   try {
     const response = await api.get(`/invoices/${invoice.value.id}/download`, {
-      responseType: 'blob' // ← indispensable pour recevoir le PDF en binaire
+      responseType: 'blob'
     });
-    // Créer une URL blob à partir des données reçues
     const blob = new Blob([response.data], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(blob);
-    // Créer un lien temporaire et le cliquer
     const link = document.createElement('a');
     link.href = url;
     link.setAttribute('download', `facture_${invoice.value.numero}.pdf`);
     document.body.appendChild(link);
     link.click();
-    // Nettoyer
     link.remove();
     window.URL.revokeObjectURL(url);
   } catch (error) {
@@ -55,6 +51,7 @@ const downloadPdf = async () => {
     Swal.fire('Erreur', 'Impossible de télécharger la facture.', 'error');
   }
 };
+
 const accessSoftware = async () => {
   const { value: key } = await Swal.fire({
     title: 'Entrez votre clé d\'accès',
@@ -104,7 +101,6 @@ onMounted(loadInvoice);
             </p>
             <p v-if="invoice.project"><span class="font-bold">Projet lié :</span> {{ invoice.project.nom }}</p>
             
-            <!-- Affichage de la clé d'accès pour les abonnements payés -->
             <div v-if="invoice.type === 'abonnement' && invoice.statut === 'paye'">
                 <p><span class="font-bold">Clé d'accès :</span></p>
                 <div class="flex items-center gap-2 bg-gray-50 p-3 rounded-lg border border-gray-200">
@@ -118,8 +114,8 @@ onMounted(loadInvoice);
         </div>
 
         <div class="mt-6 flex flex-col sm:flex-row gap-3">
-            <button v-if="invoice.statut !== 'paye'" @click="simulatePayment" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold hover:bg-green-600 transition">
-                <i class="fas fa-flask mr-2"></i> Simuler le paiement
+            <button v-if="invoice.statut !== 'paye'" @click="initiatePayment" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold hover:bg-green-600 transition">
+                <i class="fas fa-credit-card mr-2"></i> Payer avec FedaPay
             </button>
             <button v-else @click="downloadPdf" class="flex-1 bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-light transition">
                 <i class="fas fa-file-pdf mr-2"></i> Télécharger le PDF
@@ -132,7 +128,6 @@ onMounted(loadInvoice);
             <button @click="router.push('/dashboard/client/invoices')" class="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-300 transition">
                 Ignorer
             </button>
-
         </div>
     </div>
   </div>

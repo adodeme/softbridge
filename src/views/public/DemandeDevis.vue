@@ -74,7 +74,7 @@ const soumettre = async () => {
       </button>
     </form>
     <p v-if="!authStore.token" class="mt-4 text-center text-sm text-gray-500">
-      Déjà client ? <router-link to="/login" class="text-primary-light">Connectez-nous</router-link>.
+      Déjà client ? <router-link to="/login" class="text-primary-light">Connectez-vous</router-link>.
     </p>
   </div>
 </template>
