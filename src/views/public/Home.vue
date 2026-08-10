@@ -1,4 +1,9 @@
 <script setup>
+import Swal from 'sweetalert2';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 const services = [
   { icon: 'fa-laptop-code', title: 'Développement Web', slug: 'developpement-web', desc: 'Sites vitrines, E-commerce, Portails intranet et applications métiers.' },
   { icon: 'fa-mobile-screen-button', title: 'Applications Mobiles', slug: 'applications-mobiles', desc: 'Applications natives iOS/Android ou hybrides.' },
@@ -14,37 +19,56 @@ const pourquoiNous = [
   { title: 'Sécurité & Fiabilité', icon: 'fa-shield-halved', desc: 'Protocoles de sécurité de pointe pour vos données.' },
   { title: 'Accompagnement Global', icon: 'fa-handshake', desc: 'Du devis à la maintenance, nous restons à vos côtés.' }
 ];
+
+// Nouvelle fonction pour le bouton "Demander un devis"
+const demandeDevis = () => {
+  Swal.fire({
+    title: 'Comment voulez-vous procéder ?',
+    text: 'Vous pouvez prendre rendez-vous avec notre équipe pour discuter de votre projet, ou remplir directement un formulaire de demande de devis.',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Prendre rendez-vous',
+    cancelButtonText: 'Formulaire de devis',
+    reverseButtons: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+      router.push('/rdv');
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      router.push('/demande-devis');
+    }
+  });
+};
 </script>
 
 <template>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Section HERO (Bleue) -->
+    <!-- Section HERO -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-12 md:py-20">
       <div>
         <h1 class="text-4xl md:text-5xl font-bold text-primary leading-tight">
-          Le pont vers <span class="text-primary-light">votre transformation</span> <br> numérique.
+          SoftBridge, <span class="text-primary-light">le partenaire</span> de votre transformation numérique
         </h1>
         <p class="text-lg text-gray-600 mt-4 mb-8">
-          De la demande à la solution, tout sur une seule plateforme. 
-          SoftBridge connecte vos idées à la réalité technologique.
+          Nous réalisons vos projets informatiques sur mesure (sites web, logiciels de gestion, applications mobiles) et commercialisons des solutions SaaS prêtes à l’emploi.
         </p>
         <div class="flex flex-wrap gap-4">
-          <router-link to="/rdv" class="bg-primary-light text-white px-8 py-3 rounded-full font-semibold hover:bg-primary transition-colors shadow-md">
+          <button @click="demandeDevis" class="bg-primary-light text-white px-8 py-3 rounded-full font-semibold hover:bg-primary transition-colors shadow-md">
             <i class="fas fa-paper-plane mr-2"></i> Demander un devis
-          </router-link>
+          </button>
           <router-link to="/catalog" class="border-2 border-primary-light text-primary-light px-8 py-3 rounded-full font-semibold hover:bg-primary-light hover:text-white transition-colors">
             Voir le catalogue
           </router-link>
         </div>
       </div>
       <div class="hidden lg:block">
-        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop" 
-             alt="Bureau SoftBridge" 
+        <!-- Image représentant l'informatique / le code -->
+        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop" 
+             alt="Développement logiciel" 
              class="w-full h-[400px] object-cover rounded-2xl shadow-lg border-4 border-white">
       </div>
     </div>
 
-    <!-- Section POURQUOI NOUS CHOISIR -->
+    <!-- Section POURQUOI NOUS CHOISIR (inchangée) -->
     <div class="py-12 bg-white rounded-2xl shadow-sm px-6 mb-16">
       <h3 class="text-3xl font-bold text-center text-primary mb-10">Pourquoi choisir SoftBridge ?</h3>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -58,7 +82,7 @@ const pourquoiNous = [
       </div>
     </div>
 
-    <!-- Section NOS SERVICES -->
+    <!-- Section NOS SERVICES (inchangée) -->
     <div class="mb-16">
       <div class="text-center mb-10">
         <h3 class="text-3xl font-bold text-primary">Nos Services</h3>

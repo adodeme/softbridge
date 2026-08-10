@@ -4,7 +4,7 @@ const authStore = useAuthStore();
 </script>
 
 <template>
-  <aside class="w-64 bg-white border-r border-gray-200 shrink-0 hidden md:flex flex-col h-full p-4">
+  <aside class="w-64 bg-white border-r border-gray-200 flex-shrink-0 flex flex-col h-full p-4">
     <div class="mb-6">
       <img src="/logo-softbridge.png" class="h-10 object-contain" alt="SoftBridge" />
     </div>
