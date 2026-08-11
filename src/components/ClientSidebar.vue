@@ -12,6 +12,9 @@ const authStore = useAuthStore();
       <router-link to="/dashboard/client/accueil" active-class="bg-blue-50 text-primary-light" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
         <i class="fas fa-house w-5 text-center"></i> Vue d'ensemble
       </router-link>
+      <router-link to="/dashboard/[rôle]/profile" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
+        <i class="fas fa-user-circle w-5 text-center"></i> Mon Profil
+      </router-link>
       <router-link to="/dashboard/client/quotes" active-class="bg-blue-50 text-primary-light" class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
         <i class="fas fa-file-invoice w-5 text-center"></i> Devis
       </router-link>

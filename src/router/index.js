@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 
+import Profile from '@/views/dashboard/common/Profile.vue';
+
 // --- Imports publics ---
 import Login from '@/views/auth/Login.vue';
 import Register from '@/views/auth/Register.vue';
@@ -109,6 +111,7 @@ const routes = [
             { path: 'quotes/:id', component: ClientQuoteDetail },
             { path: 'projects/:id', component: ClientProjectDetail },
             { path: 'invoices/:id', component: ClientInvoiceDetail }
+            { path: 'profile', component: Profile }
         ]
     },
 
@@ -130,6 +133,7 @@ const routes = [
             { path: 'quotes/:id', component: ChefQuoteDetail },
             { path: 'projects/:id', component: ChefProjectDetail },
             { path: 'reports/:id', component: ChefReportDetail }
+            { path: 'profile', component: Profile }
         ]
     },
 
@@ -150,6 +154,7 @@ const routes = [
             { path: 'notifications', component: AdminNotifications },
             { path: 'reports/:id', component: AdminReportDetail },
             { path: 'projects/:id', component: AdminProjectDetail }
+            { path: 'profile', component: Profile }
         ]
     }
 ];
