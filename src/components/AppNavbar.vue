@@ -10,6 +10,7 @@ const route = useRoute();
 const isNavOpen = ref(false);
 const notifications = ref([]);
 
+// Chargement initial des notifications
 const fetchNotifications = async () => {
   if (authStore.token) {
     try {
@@ -29,14 +30,24 @@ const handleLogout = async () => {
   router.push('/login');
 };
 
-const reloadListener = () => fetchNotifications();
-
 onMounted(() => {
   fetchNotifications();
-  window.addEventListener('reloadNotifications', reloadListener);
+
+  // Écoute des notifications en temps réel via Echo (si l'utilisateur est connecté)
+  if (authStore.user && window.Echo) {
+    window.Echo.channel('user.' + authStore.user.id)
+      .listen('.new-notification', (event) => {
+        // Ajouter la nouvelle notification en haut de la liste
+        notifications.value.unshift(event.notification);
+      });
+  }
 });
+
+// Nettoyage (arrêt des canaux Echo automatique via Echo.leaveChannel? Non, il faut le faire manuellement)
 onUnmounted(() => {
-  window.removeEventListener('reloadNotifications', reloadListener);
+  if (authStore.user && window.Echo) {
+    window.Echo.leaveChannel('user.' + authStore.user.id);
+  }
 });
 </script>
 
