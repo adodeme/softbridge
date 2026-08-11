@@ -79,7 +79,7 @@ const routes = [
             { path: 'catalog/:id', component: SoftwareDetail },
             { path: 'rdv', component: Appointment },
             { path: 'appointments/:id', component: AppointmentDetails },
-            { path: '/demande-devis', component: () => import('@/views/public/DemandeDevis.vue') },
+            { path: 'demande-devis', component: () => import('@/views/public/DemandeDevis.vue') }, // ← corrigé (pas de /)
         ]
     },
 
@@ -110,8 +110,8 @@ const routes = [
             { path: 'notifications', component: ClientNotifications },
             { path: 'quotes/:id', component: ClientQuoteDetail },
             { path: 'projects/:id', component: ClientProjectDetail },
-            { path: 'invoices/:id', component: ClientInvoiceDetail }
-            { path: 'profile', component: Profile }
+            { path: 'invoices/:id', component: ClientInvoiceDetail },
+            { path: 'profile', component: Profile } // ← virgule ajoutée avant
         ]
     },
 
@@ -132,8 +132,8 @@ const routes = [
             { path: 'factures', component: ChefFactures },
             { path: 'quotes/:id', component: ChefQuoteDetail },
             { path: 'projects/:id', component: ChefProjectDetail },
-            { path: 'reports/:id', component: ChefReportDetail }
-            { path: 'profile', component: Profile }
+            { path: 'reports/:id', component: ChefReportDetail },
+            { path: 'profile', component: Profile } // ← virgule ajoutée avant
         ]
     },
 
@@ -153,8 +153,8 @@ const routes = [
             { path: 'statistics', component: AdminStatistics },
             { path: 'notifications', component: AdminNotifications },
             { path: 'reports/:id', component: AdminReportDetail },
-            { path: 'projects/:id', component: AdminProjectDetail }
-            { path: 'profile', component: Profile }
+            { path: 'projects/:id', component: AdminProjectDetail },
+            { path: 'profile', component: Profile } // ← virgule ajoutée avant
         ]
     }
 ];
