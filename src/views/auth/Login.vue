@@ -140,14 +140,13 @@ onUnmounted(() => clearInterval(timerInterval));
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
     <div class="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
-      <!-- Logo -->
       <img src="/logo-softbridge.png" alt="SoftBridge" class="h-16 mx-auto mb-4" />
 
       <h2 class="text-2xl font-bold text-center text-primary mb-6">
         {{ step === 1 ? 'Connexion' : 'Vérification en deux étapes' }}
       </h2>
 
-      <!-- Étape 1 : email / mot de passe -->
+      <!-- Étape 1 -->
       <form v-if="step === 1" @submit.prevent="handleStep1" class="space-y-4">
         <div v-if="errorMessage" class="bg-red-50 text-red-600 p-3 rounded-lg mb-4">
           {{ errorMessage }}
@@ -184,7 +183,7 @@ onUnmounted(() => clearInterval(timerInterval));
             Mot de passe oublié ?
           </router-link>
           <router-link to="/register" class="text-primary-light hover:underline">
-            Pas encore de compte ? S’inscrire
+            Pas encore de compte ? S'inscrire
           </router-link>
         </div>
       </form>
@@ -220,17 +219,14 @@ onUnmounted(() => clearInterval(timerInterval));
           />
         </div>
 
-        <!-- Message d'erreur OTP -->
         <div v-if="otpError" class="text-center text-sm text-red-600">
           {{ otpError }}
         </div>
 
-        <!-- Compte à rebours -->
         <p class="text-center text-sm text-gray-500">
           Code valable pendant <span class="font-mono font-bold">{{ formattedTime }}</span>
         </p>
 
-        <!-- Bouton Envoyer -->
         <button
           @click="handleStep2"
           :disabled="!isOtpComplete"
@@ -240,7 +236,6 @@ onUnmounted(() => clearInterval(timerInterval));
           Envoyer
         </button>
 
-        <!-- Lien Renvoyer (actif seulement après expiration) -->
         <div class="text-center">
           <button
             @click="resendOtp"
