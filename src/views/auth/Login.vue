@@ -14,6 +14,7 @@ const errorMessage = ref('');
 const userId = ref(null);
 const otpValues = ref(Array(6).fill(''));
 const otpInputs = ref([]);
+const activeIndex = ref(0);
 const timeLeft = ref(120);
 let timerInterval = null;
 const otpError = ref('');
@@ -83,6 +84,10 @@ const handlePaste = (event) => {
   if (digits.length === 6) otpInputs.value[5]?.focus();
 };
 
+const handleFocus = (index) => {
+  activeIndex.value = index;
+};
+
 const handleStep2 = async () => {
   if (!isOtpComplete.value) return;
   otpError.value = '';
@@ -146,7 +151,7 @@ onUnmounted(() => clearInterval(timerInterval));
         {{ step === 1 ? 'Connexion' : 'Vérification en deux étapes' }}
       </h2>
 
-      <!-- Étape 1 -->
+      <!-- Étape 1 : email / mot de passe -->
       <form v-if="step === 1" @submit.prevent="handleStep1" class="space-y-4">
         <div v-if="errorMessage" class="bg-red-50 text-red-600 p-3 rounded-lg mb-4">
           {{ errorMessage }}
@@ -183,7 +188,7 @@ onUnmounted(() => clearInterval(timerInterval));
             Mot de passe oublié ?
           </router-link>
           <router-link to="/register" class="text-primary-light hover:underline">
-            Pas encore de compte ? S'inscrire
+            Pas encore de compte ? S’inscrire
           </router-link>
         </div>
       </form>
@@ -210,23 +215,27 @@ onUnmounted(() => clearInterval(timerInterval));
             @input="handleOtpInput(index, $event)"
             @keydown="handleKeydown(index, $event)"
             @paste="handlePaste"
+            @focus="handleFocus(index)"
             class="w-12 h-14 text-center text-2xl font-bold border-2 rounded-xl outline-none transition-all duration-200"
             :class="{
-              'border-primary-light ring-2 ring-primary-light': otpInputs[index] === document.activeElement,
-              'border-gray-300 bg-gray-50': otpInputs[index] !== document.activeElement && !otpError,
-              'border-red-500 bg-red-50': otpError && otpInputs[index] !== document.activeElement,
+              'border-primary-light ring-2 ring-primary-light': activeIndex === index,
+              'border-gray-300 bg-gray-50': activeIndex !== index && !otpError,
+              'border-red-500 bg-red-50': otpError && activeIndex !== index,
             }"
           />
         </div>
 
+        <!-- Message d'erreur OTP -->
         <div v-if="otpError" class="text-center text-sm text-red-600">
           {{ otpError }}
         </div>
 
+        <!-- Compte à rebours -->
         <p class="text-center text-sm text-gray-500">
           Code valable pendant <span class="font-mono font-bold">{{ formattedTime }}</span>
         </p>
 
+        <!-- Bouton Envoyer -->
         <button
           @click="handleStep2"
           :disabled="!isOtpComplete"
@@ -236,6 +245,7 @@ onUnmounted(() => clearInterval(timerInterval));
           Envoyer
         </button>
 
+        <!-- Lien Renvoyer (actif seulement après expiration) -->
         <div class="text-center">
           <button
             @click="resendOtp"
