@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '@/api/axios';
 import Swal from 'sweetalert2';
@@ -13,6 +13,18 @@ const userId = ref(null);
 const errorMessage = ref('');
 const timeLeft = ref(120);
 let timerInterval;
+
+// Réinitialisation à chaque montage
+onMounted(() => {
+  step.value = 1;
+  email.value = '';
+  password.value = '';
+  otp.value = '';
+  userId.value = null;
+  errorMessage.value = '';
+  clearInterval(timerInterval);
+  timeLeft.value = 120;
+});
 
 const startCountdown = () => {
   clearInterval(timerInterval);
@@ -64,6 +76,13 @@ const resendOtp = async () => {
   }
 };
 
+// Revenir à l'étape 1
+const backToStep1 = () => {
+  step.value = 1;
+  errorMessage.value = '';
+  clearInterval(timerInterval);
+};
+
 onUnmounted(() => clearInterval(timerInterval));
 </script>
 
@@ -88,7 +107,10 @@ onUnmounted(() => clearInterval(timerInterval));
         <p v-else class="text-center text-sm text-red-500">Le code a expiré.</p>
         <button type="submit" :disabled="timeLeft === 0" class="w-full py-3 bg-primary-light text-white font-bold rounded-xl hover:bg-primary transition">Vérifier</button>
       </form>
-      <button @click="resendOtp" class="w-full mt-2 text-primary-light hover:underline text-sm">Renvoyer un code</button>
+      <div class="flex justify-between mt-2">
+        <button @click="backToStep1" class="text-sm text-gray-600 hover:text-primary-light">← Retour</button>
+        <button @click="resendOtp" class="text-sm text-primary-light hover:underline">Renvoyer un code</button>
+      </div>
     </div>
   </div>
 </template>
