@@ -171,6 +171,7 @@ onUnmounted(() => clearInterval(timerInterval));
 <template>
   <div class="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
     <div class="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
+      <img src="/logo-softbridge.png" alt="SoftBridge" class="h-16 mx-auto mb-4" />
       <h2 class="text-2xl font-bold text-center text-primary mb-6">
         {{ step === 1 ? 'Connexion' : 'Vérification en deux étapes' }}
       </h2>
