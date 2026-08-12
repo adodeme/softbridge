@@ -5,12 +5,20 @@ import { useAuthStore } from '@/stores/auth';
 import Swal from 'sweetalert2';
 
 const authStore = useAuthStore();
-const user = ref({});
+const user = ref(null);
 const loading = ref(false);
+const isLoading = ref(true);
 
 onMounted(async () => {
-  const res = await api.get('/profile');
-  user.value = res.data;
+  try {
+    const res = await api.get('/profile');
+    user.value = res.data;
+  } catch (e) {
+    console.error(e);
+    Swal.fire('Erreur', 'Impossible de charger votre profil.', 'error');
+  } finally {
+    isLoading.value = false;
+  }
 });
 
 const updateProfile = async () => {
@@ -48,7 +56,13 @@ const onPhotoChange = async (e) => {
 <template>
   <div class="max-w-2xl mx-auto py-8 px-4">
     <h2 class="text-2xl font-bold text-primary mb-6">Mon Profil</h2>
-    <div class="bg-white p-6 rounded-xl shadow-sm border">
+
+    <div v-if="isLoading" class="text-center py-10 text-gray-500">
+      <i class="fas fa-spinner fa-spin text-3xl text-primary-light"></i>
+      <p class="mt-2">Chargement...</p>
+    </div>
+
+    <div v-else-if="user" class="bg-white p-6 rounded-xl shadow-sm border">
       <!-- Photo de profil -->
       <div class="flex items-center gap-4 mb-6">
         <img v-if="user.photo" :src="user.photo" class="w-20 h-20 rounded-full object-cover border" />
@@ -61,7 +75,6 @@ const onPhotoChange = async (e) => {
         </label>
       </div>
 
-      <!-- Formulaire -->
       <form @submit.prevent="updateProfile" class="space-y-4">
         <div class="grid grid-cols-2 gap-4">
           <div><label class="block text-sm font-medium text-gray-700">Nom</label><input v-model="user.nom" class="w-full border rounded-lg px-3 py-2" required></div>
@@ -73,6 +86,11 @@ const onPhotoChange = async (e) => {
           {{ loading ? 'Enregistrement...' : 'Enregistrer' }}
         </button>
       </form>
+    </div>
+
+    <div v-else class="text-center py-10 text-gray-500">
+      <i class="fas fa-user-slash text-4xl mb-2 text-gray-300"></i>
+      <p>Aucune information de profil trouvée.</p>
     </div>
   </div>
 </template>
