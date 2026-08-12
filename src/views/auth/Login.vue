@@ -3,8 +3,10 @@ import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '@/api/axios';
 import Swal from 'sweetalert2';
+import { useAuthStore } from '@/stores/auth';
 
 const router = useRouter();
+const authStore = useAuthStore();
 
 const step = ref(1);
 const email = ref('');
@@ -97,8 +99,12 @@ const handleStep2 = async () => {
       user_id: userId.value,
       code: code,
     });
-    localStorage.setItem('token', res.data.access_token);
-    localStorage.setItem('user', JSON.stringify(res.data.user));
+
+    authStore.token = res.data.access_token;
+    authStore.user = res.data.user;
+    localStorage.setItem('token', authStore.token);
+    localStorage.setItem('user', JSON.stringify(authStore.user));
+
     const role = res.data.user.role;
     if (role === 'client') router.push('/dashboard/client/accueil');
     else if (role === 'chef_projet') router.push('/dashboard/chef-projet/accueil');
@@ -151,7 +157,6 @@ onUnmounted(() => clearInterval(timerInterval));
         {{ step === 1 ? 'Connexion' : 'Vérification en deux étapes' }}
       </h2>
 
-      <!-- Étape 1 : email / mot de passe -->
       <form v-if="step === 1" @submit.prevent="handleStep1" class="space-y-4">
         <div v-if="errorMessage" class="bg-red-50 text-red-600 p-3 rounded-lg mb-4">
           {{ errorMessage }}
@@ -182,7 +187,6 @@ onUnmounted(() => clearInterval(timerInterval));
           Se connecter
         </button>
 
-        <!-- Liens bas de formulaire -->
         <div class="flex justify-between text-sm mt-4">
           <router-link to="/forgot-password" class="text-primary-light hover:underline">
             Mot de passe oublié ?
@@ -193,7 +197,6 @@ onUnmounted(() => clearInterval(timerInterval));
         </div>
       </form>
 
-      <!-- Étape 2 : OTP -->
       <div v-else class="space-y-6">
         <div class="text-center">
           <h3 class="text-xl font-bold text-gray-800">
@@ -202,7 +205,6 @@ onUnmounted(() => clearInterval(timerInterval));
           <p class="text-gray-500 mt-2">{{ maskedEmail }}</p>
         </div>
 
-        <!-- Cases OTP -->
         <div class="flex justify-center gap-2 sm:gap-3">
           <input
             v-for="(_, index) in 6"
@@ -225,17 +227,14 @@ onUnmounted(() => clearInterval(timerInterval));
           />
         </div>
 
-        <!-- Message d'erreur OTP -->
         <div v-if="otpError" class="text-center text-sm text-red-600">
           {{ otpError }}
         </div>
 
-        <!-- Compte à rebours -->
         <p class="text-center text-sm text-gray-500">
           Code valable pendant <span class="font-mono font-bold">{{ formattedTime }}</span>
         </p>
 
-        <!-- Bouton Envoyer -->
         <button
           @click="handleStep2"
           :disabled="!isOtpComplete"
@@ -245,7 +244,6 @@ onUnmounted(() => clearInterval(timerInterval));
           Envoyer
         </button>
 
-        <!-- Lien Renvoyer (actif seulement après expiration) -->
         <div class="text-center">
           <button
             @click="resendOtp"
