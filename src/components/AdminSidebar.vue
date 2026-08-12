@@ -12,9 +12,6 @@ const authStore = useAuthStore();
       <router-link to="/dashboard/admin/accueil" active-class="bg-blue-50 text-primary-light" class="flex items-center gap-3 px-4 py-2 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
         <i class="fas fa-house w-5 text-center"></i> Vue d'ensemble
       </router-link>
-      <router-link to="/dashboard/admin/profile" active-class="bg-blue-50 text-primary-light" class="flex items-center gap-3 px-4 py-2 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
-        <i class="fas fa-user-circle w-5 text-center"></i> Mon Profil
-      </router-link>
       <router-link to="/dashboard/admin/users" active-class="bg-blue-50 text-primary-light" class="flex items-center gap-3 px-4 py-2 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
         <i class="fas fa-users-gear w-5 text-center"></i> Utilisateurs
       </router-link>
@@ -35,6 +32,9 @@ const authStore = useAuthStore();
       </router-link>
       <router-link to="/dashboard/admin/notifications" active-class="bg-blue-50 text-primary-light" class="flex items-center gap-3 px-4 py-2 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
         <i class="fas fa-bell w-5 text-center"></i> Notifications
+      </router-link>
+      <router-link to="/dashboard/admin/profile" active-class="bg-blue-50 text-primary-light" class="flex items-center gap-3 px-4 py-2 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
+        <i class="fas fa-user-circle w-5 text-center"></i> Mon Profil
       </router-link>
     </nav>
     <button @click="authStore.logout()" class="mt-auto flex items-center gap-3 px-4 py-2 rounded-xl text-red-500 hover:bg-red-50 transition-colors">
