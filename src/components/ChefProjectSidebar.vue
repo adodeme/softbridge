@@ -34,7 +34,26 @@ const authStore = useAuthStore();
         <i class="fas fa-user-circle w-5 text-center"></i> Mon Profil
       </router-link>
     </nav>
-    <button @click="authStore.logout()" class="mt-auto flex items-center gap-3 px-4 py-2 rounded-xl text-red-500 hover:bg-red-50 transition-colors">
+
+    <!-- Profil utilisateur connecté -->
+    <div class="border-t border-gray-200 pt-4 mb-2">
+      <div class="flex items-center gap-3 px-2">
+        <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden flex-shrink-0">
+          <img v-if="authStore.user?.photo" :src="authStore.user.photo" alt="Photo" class="w-full h-full object-cover" />
+          <div v-else class="w-full h-full flex items-center justify-center text-gray-400">
+            <i class="fas fa-user"></i>
+          </div>
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm font-semibold text-gray-800 truncate">
+            {{ authStore.user?.prenom }} {{ authStore.user?.nom }}
+          </p>
+          <p class="text-xs text-gray-500 truncate">{{ authStore.user?.email }}</p>
+        </div>
+      </div>
+    </div>
+
+    <button @click="authStore.logout()" class="flex items-center gap-3 px-4 py-2 rounded-xl text-red-500 hover:bg-red-50 transition-colors">
       <i class="fas fa-right-from-bracket w-5 text-center"></i> Déconnexion
     </button>
   </aside>
