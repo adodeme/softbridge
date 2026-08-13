@@ -20,17 +20,18 @@ const pourquoiNous = [
   { title: 'Accompagnement Global', icon: 'fa-handshake', desc: 'Du devis à la maintenance, nous restons à vos côtés.' }
 ];
 
-const chiffresCles = [
-  { valeur: '150+', label: 'Projets réalisés' },
-  { valeur: '50+', label: 'Clients actifs' },
-  { valeur: '10+', label: 'Logiciels SaaS' },
-  { valeur: '8 ans', label: 'Expérience' }
+const objectifs = [
+  { icon: 'fa-bullseye', title: 'Centraliser vos projets', desc: 'Gérer les devis, projets et factures sur une seule plateforme.' },
+  { icon: 'fa-cubes', title: 'Commercialiser des SaaS', desc: 'Proposer des logiciels prêts à l’emploi avec abonnement et licence.' },
+  { icon: 'fa-arrows-spin', title: 'Automatiser votre workflow', desc: 'De la demande de devis à la livraison, tout est suivi en temps réel.' },
+  { icon: 'fa-shield-halved', title: 'Sécuriser vos accès', desc: 'Licences chiffrées, rôles utilisateurs et authentification renforcée.' }
 ];
 
-const temoignages = [
-  { auteur: 'Aline M.', entreprise: 'Directrice, TechRise', texte: 'SoftBridge a transformé notre gestion. Leur équipe a su comprendre nos besoins et livrer une solution sur mesure.' },
-  { auteur: 'Bruno K.', entreprise: 'Fondateur, Agrilink', texte: 'Professionnalisme et réactivité. Nous avons gagné un temps précieux grâce à leurs logiciels SaaS.' },
-  { auteur: 'Clarisse D.', entreprise: 'DG, FinPro Services', texte: 'Un accompagnement de haut niveau, du devis à la maintenance. Je recommande vivement.' }
+const engagement = [
+  { title: 'Transparence', icon: 'fa-eye', desc: 'Des processus clairs, des devis détaillés et un suivi constant.' },
+  { title: 'Qualité', icon: 'fa-star', desc: 'Des solutions robustes, testées et conformes aux normes actuelles.' },
+  { title: 'Réactivité', icon: 'fa-bolt', desc: 'Une équipe disponible pour vous accompagner à chaque étape.' },
+  { title: 'Proximité', icon: 'fa-heart', desc: 'Une relation de confiance durable avec chacun de nos clients.' }
 ];
 
 const demandeDevis = () => {
@@ -79,21 +80,21 @@ const demandeDevis = () => {
       </div>
     </div>
 
-    <!-- Section À PROPOS (ajoutée) -->
+    <!-- Section À PROPOS (texte amélioré) -->
     <div class="py-16 bg-white rounded-2xl shadow-sm px-6 mb-16 mt-8">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
           <h3 class="text-3xl font-bold text-primary mb-4">À propos de SoftBridge</h3>
           <p class="text-gray-600 leading-relaxed mb-4">
-            SoftBridge est une entreprise de services numériques basée à Cotonou, Bénin. Nous accompagnons les entreprises et organisations dans la conception, le développement et la commercialisation de solutions logicielles innovantes.
+            SoftBridge est une plateforme web conçue pour les entreprises de services numériques. Elle permet de gérer deux activités essentielles : la <strong>réalisation de projets informatiques sur mesure</strong> et la <strong>commercialisation de logiciels SaaS</strong>.
           </p>
           <p class="text-gray-600 leading-relaxed mb-4">
-            Notre mission est de connecter vos idées à la réalité technologique, que ce soit à travers des projets sur mesure ou des logiciels SaaS prêts à l'emploi.
+            De la prise de rendez-vous jusqu'à la facturation, en passant par la gestion des devis, des projets et des abonnements, SoftBridge offre un espace unique pour piloter toute votre activité. Chaque acteur – visiteur, client, chef de projet ou administrateur – dispose d'outils adaptés à son rôle.
           </p>
           <div class="space-y-2">
-            <p class="text-gray-700"><i class="fas fa-check-circle text-primary-light mr-2"></i> Expertise locale et internationale</p>
-            <p class="text-gray-700"><i class="fas fa-check-circle text-primary-light mr-2"></i> Solutions flexibles et évolutives</p>
-            <p class="text-gray-700"><i class="fas fa-check-circle text-primary-light mr-2"></i> Support réactif et durable</p>
+            <p class="text-gray-700"><i class="fas fa-check-circle text-primary-light mr-2"></i> Centralisation des données et suivi en temps réel</p>
+            <p class="text-gray-700"><i class="fas fa-check-circle text-primary-light mr-2"></i> Génération automatique de factures et de licences</p>
+            <p class="text-gray-700"><i class="fas fa-check-circle text-primary-light mr-2"></i> Sécurité renforcée avec clés chiffrées et authentification à deux facteurs</p>
           </div>
         </div>
         <div class="hidden lg:block">
@@ -104,41 +105,47 @@ const demandeDevis = () => {
       </div>
     </div>
 
-    <!-- Section CHIFFRES CLÉS (ajoutée) -->
+    <!-- Section OBJECTIFS (remplace "SoftBridge en chiffres") -->
     <div class="py-12 bg-primary rounded-2xl shadow-lg px-6 mb-16 text-white">
-      <h3 class="text-3xl font-bold text-center mb-10">SoftBridge en chiffres</h3>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-        <div v-for="chiffre in chiffresCles" :key="chiffre.label">
-          <p class="text-4xl font-bold text-primary-light">{{ chiffre.valeur }}</p>
-          <p class="text-sm text-gray-300 mt-1">{{ chiffre.label }}</p>
+      <h3 class="text-3xl font-bold text-center mb-10">Les objectifs de la plateforme</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div v-for="objectif in objectifs" :key="objectif.title" class="text-center">
+          <div class="w-14 h-14 mx-auto bg-white/10 rounded-full flex items-center justify-center text-2xl mb-3">
+            <i :class="'fas ' + objectif.icon"></i>
+          </div>
+          <h5 class="font-bold text-white">{{ objectif.title }}</h5>
+          <p class="text-sm text-gray-300 mt-2">{{ objectif.desc }}</p>
         </div>
       </div>
     </div>
 
-    <!-- Section TÉMOIGNAGES (ajoutée) -->
+    <!-- Section NOS ENGAGEMENTS (remplace "Ils nous font confiance") -->
     <div class="py-12 bg-white rounded-2xl shadow-sm px-6 mb-16">
-      <h3 class="text-3xl font-bold text-center text-primary mb-10">Ils nous font confiance</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div v-for="temoignage in temoignages" :key="temoignage.auteur" class="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow">
-          <i class="fas fa-quote-left text-primary-light text-2xl mb-2"></i>
-          <p class="text-gray-600 text-sm leading-relaxed mb-4">« {{ temoignage.texte }} »</p>
-          <p class="font-bold text-gray-800">{{ temoignage.auteur }}</p>
-          <p class="text-xs text-gray-500">{{ temoignage.entreprise }}</p>
+      <h3 class="text-3xl font-bold text-center text-primary mb-10">Nos engagements</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div v-for="item in engagement" :key="item.title" class="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow text-center">
+          <div class="w-14 h-14 mx-auto bg-blue-50 text-primary-light rounded-full flex items-center justify-center text-2xl mb-3">
+            <i :class="'fas ' + item.icon"></i>
+          </div>
+          <h5 class="font-bold text-gray-800">{{ item.title }}</h5>
+          <p class="text-sm text-gray-600 mt-2">{{ item.desc }}</p>
         </div>
       </div>
     </div>
 
-    <!-- Section APPEL À L'ACTION (ajoutée) -->
+    <!-- Section APPEL À L'ACTION (texte amélioré, boutons RDV et devis) -->
     <div class="bg-primary-light text-white rounded-2xl shadow-lg px-6 py-12 mb-16 text-center">
       <h3 class="text-3xl font-bold mb-4">Prêt à lancer votre projet ?</h3>
-      <p class="text-lg mb-8 text-gray-100">Rejoignez des dizaines d'entreprises qui ont fait confiance à SoftBridge.</p>
-      <div class="flex justify-center gap-4">
+      <p class="text-lg mb-8 text-gray-100 max-w-2xl mx-auto">
+        Discutons de vos besoins et trouvons la solution idéale pour votre entreprise. Prenez un rendez-vous ou demandez directement un devis en ligne, nous vous répondrons rapidement.
+      </p>
+      <div class="flex justify-center gap-4 flex-wrap">
         <router-link to="/rdv" class="bg-white text-primary px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">
-          Prendre rendez-vous
+          Prendre un rendez-vous
         </router-link>
-        <router-link to="/register" class="border-2 border-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-primary transition">
-          Créer un compte
-        </router-link>
+        <button @click="demandeDevis" class="border-2 border-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-primary transition">
+          Demander un devis
+        </button>
       </div>
     </div>
 
