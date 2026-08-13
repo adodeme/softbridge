@@ -20,7 +20,19 @@ const pourquoiNous = [
   { title: 'Accompagnement Global', icon: 'fa-handshake', desc: 'Du devis à la maintenance, nous restons à vos côtés.' }
 ];
 
-// Nouvelle fonction pour le bouton "Demander un devis"
+const chiffresCles = [
+  { valeur: '150+', label: 'Projets réalisés' },
+  { valeur: '50+', label: 'Clients actifs' },
+  { valeur: '10+', label: 'Logiciels SaaS' },
+  { valeur: '8 ans', label: 'Expérience' }
+];
+
+const temoignages = [
+  { auteur: 'Aline M.', entreprise: 'Directrice, TechRise', texte: 'SoftBridge a transformé notre gestion. Leur équipe a su comprendre nos besoins et livrer une solution sur mesure.' },
+  { auteur: 'Bruno K.', entreprise: 'Fondateur, Agrilink', texte: 'Professionnalisme et réactivité. Nous avons gagné un temps précieux grâce à leurs logiciels SaaS.' },
+  { auteur: 'Clarisse D.', entreprise: 'DG, FinPro Services', texte: 'Un accompagnement de haut niveau, du devis à la maintenance. Je recommande vivement.' }
+];
+
 const demandeDevis = () => {
   Swal.fire({
     title: 'Comment voulez-vous procéder ?',
@@ -42,7 +54,7 @@ const demandeDevis = () => {
 
 <template>
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Section HERO -->
+    <!-- Section HERO (inchangée) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-12 md:py-20">
       <div>
         <h1 class="text-4xl md:text-5xl font-bold text-primary leading-tight">
@@ -61,10 +73,72 @@ const demandeDevis = () => {
         </div>
       </div>
       <div class="hidden lg:block">
-        <!-- Image représentant l'informatique / le code -->
         <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop" 
              alt="Développement logiciel" 
              class="w-full h-[400px] object-cover rounded-2xl shadow-lg border-4 border-white">
+      </div>
+    </div>
+
+    <!-- Section À PROPOS (ajoutée) -->
+    <div class="py-16 bg-white rounded-2xl shadow-sm px-6 mb-16 mt-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h3 class="text-3xl font-bold text-primary mb-4">À propos de SoftBridge</h3>
+          <p class="text-gray-600 leading-relaxed mb-4">
+            SoftBridge est une entreprise de services numériques basée à Cotonou, Bénin. Nous accompagnons les entreprises et organisations dans la conception, le développement et la commercialisation de solutions logicielles innovantes.
+          </p>
+          <p class="text-gray-600 leading-relaxed mb-4">
+            Notre mission est de connecter vos idées à la réalité technologique, que ce soit à travers des projets sur mesure ou des logiciels SaaS prêts à l'emploi.
+          </p>
+          <div class="space-y-2">
+            <p class="text-gray-700"><i class="fas fa-check-circle text-primary-light mr-2"></i> Expertise locale et internationale</p>
+            <p class="text-gray-700"><i class="fas fa-check-circle text-primary-light mr-2"></i> Solutions flexibles et évolutives</p>
+            <p class="text-gray-700"><i class="fas fa-check-circle text-primary-light mr-2"></i> Support réactif et durable</p>
+          </div>
+        </div>
+        <div class="hidden lg:block">
+          <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop" 
+               alt="Notre équipe" 
+               class="w-full h-[350px] object-cover rounded-2xl shadow-lg border-4 border-white">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section CHIFFRES CLÉS (ajoutée) -->
+    <div class="py-12 bg-primary rounded-2xl shadow-lg px-6 mb-16 text-white">
+      <h3 class="text-3xl font-bold text-center mb-10">SoftBridge en chiffres</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div v-for="chiffre in chiffresCles" :key="chiffre.label">
+          <p class="text-4xl font-bold text-primary-light">{{ chiffre.valeur }}</p>
+          <p class="text-sm text-gray-300 mt-1">{{ chiffre.label }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section TÉMOIGNAGES (ajoutée) -->
+    <div class="py-12 bg-white rounded-2xl shadow-sm px-6 mb-16">
+      <h3 class="text-3xl font-bold text-center text-primary mb-10">Ils nous font confiance</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div v-for="temoignage in temoignages" :key="temoignage.auteur" class="bg-gray-50 rounded-xl p-6 border border-gray-100 hover:shadow-md transition-shadow">
+          <i class="fas fa-quote-left text-primary-light text-2xl mb-2"></i>
+          <p class="text-gray-600 text-sm leading-relaxed mb-4">« {{ temoignage.texte }} »</p>
+          <p class="font-bold text-gray-800">{{ temoignage.auteur }}</p>
+          <p class="text-xs text-gray-500">{{ temoignage.entreprise }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section APPEL À L'ACTION (ajoutée) -->
+    <div class="bg-primary-light text-white rounded-2xl shadow-lg px-6 py-12 mb-16 text-center">
+      <h3 class="text-3xl font-bold mb-4">Prêt à lancer votre projet ?</h3>
+      <p class="text-lg mb-8 text-gray-100">Rejoignez des dizaines d'entreprises qui ont fait confiance à SoftBridge.</p>
+      <div class="flex justify-center gap-4">
+        <router-link to="/rdv" class="bg-white text-primary px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition">
+          Prendre rendez-vous
+        </router-link>
+        <router-link to="/register" class="border-2 border-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-primary transition">
+          Créer un compte
+        </router-link>
       </div>
     </div>
 

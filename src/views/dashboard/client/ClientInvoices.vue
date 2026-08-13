@@ -1,19 +1,22 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import api from '@/api/axios';
+import LoadingSpinner from '@/components/LoadingSpinner.vue';
 
 const invoices = ref([]);
 const activeTab = ref('devis');
+const isLoading = ref(true);
 
 onMounted(async () => {
   try {
     invoices.value = (await api.get('/invoices')).data;
   } catch (error) {
     console.error('Erreur lors du chargement des factures', error);
+  } finally {
+    isLoading.value = false;
   }
 });
 
-// Filtrer les factures selon l'onglet actif
 const filteredInvoices = computed(() => {
   return invoices.value.filter(inv => inv.type === activeTab.value);
 });
@@ -21,83 +24,44 @@ const filteredInvoices = computed(() => {
 
 <template>
   <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-    <div class="flex items-center gap-2 mb-6">
-      <i class="fas fa-receipt text-2xl text-primary-light"></i>
-      <h3 class="text-2xl font-bold text-primary">Mes Factures</h3>
-    </div>
-    
-    <!-- Onglets Devis / Abonnement -->
-    <div class="flex border-b border-gray-200 mb-6">
-      <button 
-        @click="activeTab = 'devis'" 
-        :class="[
-          'px-4 py-2 font-medium text-sm transition-colors border-b-2',
-          activeTab === 'devis' 
-            ? 'border-primary text-primary' 
-            : 'border-transparent text-gray-500 hover:text-gray-700'
-        ]"
-      >
-        <i class="fas fa-file-invoice mr-2"></i> Factures Devis
-      </button>
-      <button 
-        @click="activeTab = 'abonnement'" 
-        :class="[
-          'px-4 py-2 font-medium text-sm transition-colors border-b-2',
-          activeTab === 'abonnement' 
-            ? 'border-primary text-primary' 
-            : 'border-transparent text-gray-500 hover:text-gray-700'
-        ]"
-      >
-        <i class="fas fa-cubes mr-2"></i> Factures Abonnements
-      </button>
-    </div>
+    <h3 class="font-bold text-xl text-primary mb-4">Mes Factures</h3>
 
-    <!-- Liste filtrée -->
-    <div v-if="filteredInvoices.length === 0" class="text-center py-12 text-gray-400">
-      <i class="fas fa-file-circle-xmark text-5xl mb-3 block text-gray-300"></i>
-      <p>Aucune facture dans cette catégorie.</p>
-    </div>
+    <LoadingSpinner v-if="isLoading" />
 
-    <div v-else class="space-y-4">
-      <div v-for="inv in filteredInvoices" :key="inv.id"
-           class="bg-gray-50 rounded-lg p-5 border border-gray-200 hover:border-primary-light transition-colors duration-200">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <!-- Informations principales -->
-          <div class="flex-1">
-            <div class="flex items-center gap-3 mb-2">
-              <span class="text-xs font-semibold text-gray-500 bg-white px-3 py-1 rounded-full border">
-                {{ inv.numero }}
-              </span>
-              <span class="px-3 py-1 text-xs font-bold rounded-full"
-                    :class="{
-                      'bg-red-100 text-red-700': inv.statut === 'impaye',
-                      'bg-green-100 text-green-700': inv.statut === 'paye'
-                    }">
-                {{ inv.statut.toUpperCase() }}
+    <template v-else>
+      <div class="flex border-b border-gray-200 mb-6">
+        <button @click="activeTab = 'devis'" :class="['px-4 py-2 font-medium text-sm transition-colors', activeTab === 'devis' ? 'border-b-2 border-primary text-primary' : 'text-gray-500 hover:text-gray-700']">
+          Factures Devis
+        </button>
+        <button @click="activeTab = 'abonnement'" :class="['px-4 py-2 font-medium text-sm transition-colors', activeTab === 'abonnement' ? 'border-b-2 border-primary text-primary' : 'text-gray-500 hover:text-gray-700']">
+          Factures Abonnements
+        </button>
+      </div>
+
+      <div v-if="filteredInvoices.length === 0" class="text-gray-400 text-center py-4">Aucune facture dans cette catégorie.</div>
+
+      <div v-else class="space-y-4">
+        <div v-for="inv in filteredInvoices" :key="inv.id" class="border-b border-gray-100 py-4 flex justify-between items-center">
+          <div>
+            <p class="font-medium text-gray-800">{{ inv.numero }}</p>
+            <p class="text-sm text-gray-500">{{ inv.montant.toLocaleString() }} FCFA</p>
+            <div class="mt-1 text-xs text-gray-400 flex gap-3">
+              <span>Type : {{ inv.type === 'devis' ? 'Devis' : 'Abonnement' }}</span>
+              <span>Statut : 
+                <span :class="{'text-red-600 font-bold': inv.statut === 'impaye', 'text-green-600 font-bold': inv.statut === 'paye'}">
+                  {{ inv.statut.toUpperCase() }}
+                </span>
               </span>
             </div>
-            <h4 class="text-lg font-bold text-gray-800">
-              {{ inv.montant.toLocaleString() }} FCFA
-            </h4>
-            <p class="text-sm text-gray-500 mt-1">
-              {{ inv.type === 'devis' ? 'Projet sur mesure' : 'Abonnement logiciel' }}
-            </p>
           </div>
-
-          <!-- Clé d'accès pour les abonnements payés -->
-          <div class="flex items-center gap-2">
-            <span v-if="inv.type === 'abonnement' && inv.statut === 'paye'" 
-                  class="text-primary font-mono text-sm bg-white px-3 py-1 rounded border">
-              ******
+          <div class="flex gap-2">
+            <span v-if="inv.type === 'abonnement' && inv.statut === 'paye'" class="text-primary font-mono text-sm cursor-pointer" title="Cliquez pour voir la clé">
+              ****** <i class="fas fa-eye ml-1 text-gray-400 text-xs"></i>
             </span>
-            <!-- Bouton Détail -->
-            <router-link :to="`/dashboard/client/invoices/${inv.id}`" 
-                         class="inline-flex items-center gap-1 px-3 py-2 text-sm font-medium text-primary bg-primary/5 rounded-lg hover:bg-primary/10 transition">
-              <i class="fas fa-eye"></i> Détail
-            </router-link>
+            <router-link :to="`/dashboard/client/invoices/${inv.id}`" class="text-primary-light hover:text-primary text-sm font-semibold">Détails</router-link>
           </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
