@@ -54,7 +54,7 @@ const demandeDevis = () => {
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-[#F5F5DC]">
     <!-- Section HERO (inchangée) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center py-12 md:py-20">
       <div>
