@@ -21,11 +21,12 @@ const loadInvoice = async () => {
     }
 };
 
-// Paiement réel via FedaPay (mode test)
 const initiatePayment = async () => {
   try {
-    const res = await api.post('/payments/initiate', { invoice_id: invoice.value.id });
-    // Rediriger vers l'URL de paiement FedaPay
+    const res = await api.post('/payments/initiate', {
+      type: invoice.value.type, // 'devis' ou 'abonnement'
+      id: invoice.value.type === 'devis' ? invoice.value.id : invoice.value.subscription_id // selon votre logique
+    });
     window.location.href = res.data.payment_url;
   } catch (error) {
     Swal.fire('Erreur', error.response?.data?.error || 'Impossible d’initier le paiement.', 'error');
@@ -61,9 +62,7 @@ const accessSoftware = async () => {
     confirmButtonText: 'Accéder',
     cancelButtonText: 'Annuler',
     inputValidator: (value) => {
-      if (!value) {
-        return 'Vous devez entrer une clé!';
-      }
+      if (!value) return 'Vous devez entrer une clé!';
     }
   });
 
@@ -71,9 +70,7 @@ const accessSoftware = async () => {
 
   try {
     const res = await api.post('/software/verify-key', { key: key });
-    if (res.data.url) {
-      window.open(res.data.url, '_blank');
-    }
+    if (res.data.url) window.open(res.data.url, '_blank');
   } catch (error) {
     Swal.fire('Erreur', error.response?.data?.message || 'Clé invalide ou expirée.', 'error');
   }
@@ -115,7 +112,7 @@ onMounted(loadInvoice);
 
         <div class="mt-6 flex flex-col sm:flex-row gap-3">
             <button v-if="invoice.statut !== 'paye'" @click="initiatePayment" class="flex-1 bg-green-500 text-white py-3 rounded-xl font-bold hover:bg-green-600 transition">
-                <i class="fas fa-credit-card mr-2"></i> Payer avec FedaPay
+                <i class="fas fa-credit-card mr-2"></i> Payer avec KkiaPay
             </button>
             <button v-else @click="downloadPdf" class="flex-1 bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-light transition">
                 <i class="fas fa-file-pdf mr-2"></i> Télécharger le PDF
