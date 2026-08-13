@@ -24,8 +24,7 @@ const loadInvoice = async () => {
 const initiatePayment = async () => {
   try {
     const res = await api.post('/payments/initiate', {
-      type: invoice.value.type, // 'devis' ou 'abonnement'
-      id: invoice.value.type === 'devis' ? invoice.value.id : invoice.value.subscription_id // selon votre logique
+      invoice_id: invoice.value.id
     });
     window.location.href = res.data.payment_url;
   } catch (error) {
