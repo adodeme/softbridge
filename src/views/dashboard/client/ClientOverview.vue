@@ -3,21 +3,26 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import api from '@/api/axios';
 import { useAuthStore } from '@/stores/auth';
+import { useRoute, useRouter } from 'vue-router';
+import Swal from 'sweetalert2';
 
+const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 const stats = ref({});
 const isLoading = ref(true);
 
 onMounted(async () => {
-  try {
-    const response = await api.get('/dashboard/stats');
-    stats.value = response.data;
-  } catch (error) {
-    console.error('Erreur lors du chargement des statistiques', error);
-  } finally {
-    isLoading.value = false;
-  }
+    if (route.query.payment_status === 'processing' && route.query.reference) {
+        try {
+            await api.get(`/payments/verify?reference=${route.query.reference}`);
+            Swal.fire('Succès', 'Paiement confirmé.', 'success');
+        } catch (e) {
+            Swal.fire('Erreur', e.response?.data?.message || 'Paiement non confirmé.', 'error');
+        } finally {
+            router.replace({ path: '/dashboard/client/accueil' });
+        }
+    }
 });
 
 const cards = [
