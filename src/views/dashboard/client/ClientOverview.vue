@@ -1,9 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import api from '@/api/axios';
 import { useAuthStore } from '@/stores/auth';
-import { useRoute, useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 
 const route = useRoute();
