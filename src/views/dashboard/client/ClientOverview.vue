@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import api from '@/api/axios';
 import { useAuthStore } from '@/stores/auth';
@@ -11,17 +11,30 @@ const authStore = useAuthStore();
 const stats = ref({});
 const isLoading = ref(true);
 
+const loadStats = async () => {
+  try {
+    const response = await api.get('/dashboard/stats');
+    stats.value = response.data;
+  } catch (error) {
+    console.error('Erreur chargement stats', error);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
 onMounted(async () => {
-    if (route.query.payment_status === 'processing' && route.query.reference) {
-        try {
-            await api.get(`/payments/verify?reference=${route.query.reference}`);
-            Swal.fire('Succès', 'Paiement confirmé.', 'success');
-        } catch (e) {
-            Swal.fire('Erreur', e.response?.data?.message || 'Paiement non confirmé.', 'error');
-        } finally {
-            router.replace({ path: '/dashboard/client/accueil' });
-        }
+  await loadStats();
+
+  if (route.query.payment_status === 'processing' && route.query.reference) {
+    try {
+      await api.get(`/payments/verify?reference=${route.query.reference}`);
+      Swal.fire('Succès', 'Paiement confirmé.', 'success');
+    } catch (e) {
+      Swal.fire('Erreur', e.response?.data?.message || 'Paiement non confirmé.', 'error');
+    } finally {
+      router.replace({ path: '/dashboard/client/accueil' });
     }
+  }
 });
 
 const cards = [
